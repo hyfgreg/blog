@@ -19,4 +19,18 @@ class Article(models.Model):
 class Tag(models.Model):
     name = models.CharField(max_length=32, verbose_name='标签')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
-    article = models.ManyToManyField(Article, related_name='tag')
+    # article = models.ManyToManyField(Article, related_name='tag')
+
+
+class ArticleTag(models.Model):
+    _article = models.ForeignKey(Article, related_name='tag', on_delete=models.CASCADE)
+    _tag = models.ForeignKey(Tag, related_name='article', on_delete=models.CASCADE)
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+
+    @property
+    def tag(self):
+        return self._tag.name
+
+    @property
+    def article(self):
+        return self._article.title
